@@ -1,0 +1,30 @@
+/* MarkRanc on the Northline template: states Framer's runtime animated, as CSS (values from the template modules). */
+
+/* page change: Framer's global transition (exit: fade + 12px up 0.3s [.44,0,.56,1]; enter: fade + 24px down 0.7s [.22,1,.36,1]) */
+@view-transition { navigation: auto; }
+@keyframes nl-exit { to { opacity: 0; transform: translateY(-12px); } }
+@keyframes nl-enter { from { opacity: 0; transform: translateY(24px); } }
+::view-transition-old(root) { animation: nl-exit .3s cubic-bezier(.44,0,.56,1) both; }
+::view-transition-new(root) { animation: nl-enter .7s cubic-bezier(.22,1,.36,1) both; }
+@media (prefers-reduced-motion) { ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
+
+/* Arrow Button (Light / Light Mono / Nav / Dark / Dark Inverse): bar + square colours swap, arrow turns -45deg (spring 0.45s, bounce 0) */
+.framer-CKgqS .framer-1kuq7t1, .framer-CKgqS .framer-1ukaqh9 { transition: background-color .45s cubic-bezier(.22,1,.36,1); }
+.framer-CKgqS svg { transition: transform .45s cubic-bezier(.22,1,.36,1); }
+@media (hover: hover) {
+  .framer-CKgqS.framer-v-18axwp3:hover .framer-1kuq7t1, .framer-CKgqS.framer-v-1asx548:hover .framer-1kuq7t1,
+  .framer-CKgqS.framer-v-u4lnu8:hover .framer-1kuq7t1, .framer-CKgqS.framer-v-cip4im:hover .framer-1kuq7t1 { background-color: var(--token-b83f7a23-07b8-44f5-b7e5-f2875dbfb8c4) !important; }
+  .framer-CKgqS.framer-v-dc2hqj:hover .framer-1kuq7t1 { background-color: var(--token-502f1f33-5106-4992-8dec-d5557fb8b617) !important; }
+  .framer-CKgqS.framer-v-18axwp3:hover .framer-1ukaqh9, .framer-CKgqS.framer-v-1asx548:hover .framer-1ukaqh9,
+  .framer-CKgqS.framer-v-u4lnu8:hover .framer-1ukaqh9 { background-color: var(--token-4da627ef-0cd5-4962-a6bd-8cb436b730fa) !important; }
+  .framer-CKgqS.framer-v-dc2hqj:hover .framer-1ukaqh9 { background-color: var(--token-b83f7a23-07b8-44f5-b7e5-f2875dbfb8c4) !important; }
+  .framer-CKgqS.framer-v-cip4im:hover .framer-1ukaqh9 { background-color: var(--token-502f1f33-5106-4992-8dec-d5557fb8b617) !important; }
+  .framer-CKgqS.framer-v-dc2hqj:hover .framer-1kuq7t1 p, .framer-CKgqS.framer-v-cip4im:hover .framer-1kuq7t1 p { --framer-text-color: var(--token-4da627ef-0cd5-4962-a6bd-8cb436b730fa) !important; }
+  .framer-CKgqS:hover .framer-1ukaqh9 svg { transform: rotate(-45deg) !important; }
+  .framer-CKgqS.framer-v-18axwp3:hover .framer-1ukaqh9 svg, .framer-CKgqS.framer-v-1asx548:hover .framer-1ukaqh9 svg,
+  .framer-CKgqS.framer-v-u4lnu8:hover .framer-1ukaqh9 svg { --1m973uw: #fff !important; }
+}
+/* phone nav: close icon shown in the open drawer */
+.x-close { width: 20px; height: 20px; display: block; }
+[data-framer-name="Menu Button"] { cursor: pointer; }
+:focus-visible { outline: 2px solid #d2247c; outline-offset: 2px; }
