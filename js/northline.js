@@ -93,20 +93,32 @@
       }
       if (c.h && !el.__h && matchMedia('(hover: hover)').matches) {
         el.__h = true;
-        var base = null, anim = null;
+        /* whileHover: animate only the properties the template's hover changes, from wherever the element is now,
+           and hand control back to its own styles when the pointer leaves (so a scroll reveal can't get stuck) */
+        var hv = c.h.v, lift = c.h.lift || 0, anim = null;
+        var hoverTf = tfm(lift ? Object.assign({}, hv, { y: (hv.y || 0) + lift }) : hv);
+        var props = function (cs) {
+          var o = {};
+          if (hv.backgroundColor) o.backgroundColor = cs.backgroundColor;
+          if (hoverTf !== 'none') o.transform = cs.transform;
+          return o;
+        };
         el.addEventListener('pointerenter', function () {
-          var cs = getComputedStyle(el);
-          if (!base) base = { transform: cs.transform === 'none' ? 'none' : cs.transform, backgroundColor: cs.backgroundColor };
-          var to = { transform: tfm(c.h.v) };
-          if (c.h.v.backgroundColor) to.backgroundColor = c.h.v.backgroundColor;
+          var cs = getComputedStyle(el), from = props(cs), to = {};
+          if (hv.backgroundColor) to.backgroundColor = hv.backgroundColor;
+          if (hoverTf !== 'none') to.transform = hoverTf;
           if (anim) anim.cancel();
-          anim = el.animate([{ transform: cs.transform, backgroundColor: cs.backgroundColor }, to], timing(c.h.t));
+          var t = timing(c.h.t); t.fill = 'forwards';
+          anim = el.animate([from, to], t);
         });
         el.addEventListener('pointerleave', function () {
-          if (!base) return;
-          var cs = getComputedStyle(el), from = { transform: cs.transform, backgroundColor: cs.backgroundColor };
-          if (anim) anim.cancel();
-          anim = el.animate([from, base], timing(c.h.t));
+          if (!anim) return;
+          var cs = getComputedStyle(el), from = props(cs);
+          anim.cancel();
+          var rest = props(getComputedStyle(el));
+          var t = timing(c.h.t); t.fill = 'none';
+          anim = el.animate([from, rest], t);
+          anim.onfinish = function () { anim = null; };
         });
       }
       if (c.l && !el.__l && el.animate && !reduced) {
